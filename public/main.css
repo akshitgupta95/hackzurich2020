@@ -8,3 +8,29 @@
   margin: auto;
 
 }
+
+.button {
+    display: block;
+    width: 115px;
+    height: 30px;
+    background: #42A5F5;
+    padding: 10px;
+	margin: 10px;
+    text-align: center;
+	text-decoration:none !important;
+    border-radius: 5px;
+    color: white;
+	font-size:20px;
+	font-family:Arial;
+    line-height: 30px;
+}
+
+.scenario {
+	background: #EEEEEE;
+	border-radius: 5px;
+	border-color: #000000;
+	border-width: thin;
+	font-size:17px;
+	font-family:Courier New;
+	padding: 10px;
+}
