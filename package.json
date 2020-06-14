@@ -1,5 +1,5 @@
 {
-  "name": "ciphix-ca-technical-test",
+  "name": "crowd_computing",
   "version": "1.0.0",
   "description": "This package is meant for potential Conversational Automation developers within Ciphix.",
   "main": "index.js",
