@@ -6,7 +6,7 @@
 module.exports = {
 
   fulfillment: function (agent) {
-    agent.add('Hello there roamer of the sky, ask me about the weather')
+    agent.add('Hi! This is a conversational interface to suggest housing options in Delft. My name is Clint. What\'s your name?')
   }
 
-}
+};

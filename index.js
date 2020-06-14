@@ -1,16 +1,24 @@
 const express = require('express');
-const { WebhookClient } = require('dialogflow-fulfillment');
+const { WebhookClient} = require('dialogflow-fulfillment');
 const app = express();
 
 /**
  * Require all intent fulfillment modules
  */
 const f_welcome = require('./fulfillments/default/welcome');
-const f_fallback = require('./fulfillments/default/fallback');
-const f_weather = require('./fulfillments/default/weather');
-const f_flightweather = require('./fulfillments/default/flightweather');
-// Todo: create and require a fulfillment module for each custom intent
-// Hint: use the directory fulfillments/custom
+const f_name = require('./fulfillments/default/nameIntent');
+const f_houseType = require('./fulfillments/default/TypeOfHouse');
+const f_houseTypeNo = require('./fulfillments/default/TypeOfHouseNo');
+const f_houseTypeYes = require('./fulfillments/default/TypeOfHouseYes');
+const f_Budget = require('./fulfillments/default/budgetIntent');
+const f_duration = require('./fulfillments/default/durationIntent');
+const f_travel = require('./fulfillments/default/travelIntent');
+const f_superMarket = require('./fulfillments/default/supermarket');
+const f_final = require('./fulfillments/default/NoMoreConstraintsIntent');
+
+
+
+
 
 app.post('/', express.json(), (req, res) => {
 
@@ -21,9 +29,21 @@ app.post('/', express.json(), (req, res) => {
    * Connect fulfillment modules to Dialogflow intents
    */
   intentMap.set('Default Welcome Intent', f_welcome.fulfillment);
-  intentMap.set('Default Fallback Intent', f_fallback.fulfillment);
-  intentMap.set('Default Weather Intent', f_weather.fulfillment);
-  intentMap.set('Default Flight Weather Intent', f_flightweather.fulfillment);
+  intentMap.set('NameIntent', f_name.fulfillment);
+  intentMap.set('TypeOfHouse', f_houseType.fulfillment);
+  intentMap.set('TypeOfHouse - no', f_houseTypeNo.fulfillment);
+  intentMap.set('AnyOtherConstraints - yes', f_houseTypeYes.fulfillment);
+  intentMap.set('budgetIntent', f_Budget.fulfillment);
+  intentMap.set('DurationIntent', f_duration.fulfillment);
+  intentMap.set('TravelTimeIntent', f_travel.fulfillment);
+  intentMap.set('SupermarketIntent', f_superMarket.fulfillment);
+  intentMap.set('NoMoreConstraintsIntent', f_final.fulfillment);
+
+
+
+
+
+
 
   // Todo: connect each custom intent with custom fulfillment modules
   // Hint: create a intent in Dialogflow first
