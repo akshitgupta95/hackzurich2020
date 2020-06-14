@@ -1,3 +1,5 @@
+const { Card} = require('dialogflow-fulfillment');
+
 module.exports = {
 
     fulfillment: function (agent) {
@@ -30,7 +32,11 @@ module.exports = {
             response=response+"\n Nearby Supermarkets: Required"
         }
         agent.add(response);
-        agent.add("I suggest the following options for you. 1. 2. 3. ");
+        agent.add("I suggest the following options for you.");
+        agent.add("1. Xior Barbarasteeg\n Rent: Euro 440 \n Location: Barbarasteed 2C2, Delft \n Additonals: In front of Delft Station, 8 minutes to TU" );
+        agent.add("2. Roland Holstlaan\n Rent: Euro 500 \n Location: Roland Holstlaan, Delft \n Additonals: Near Delft South, 12 minutes to TU");
+        agent.end("Hope you like these. Have a nice Day!");
+
     }
 
 };
