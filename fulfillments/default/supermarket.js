@@ -8,7 +8,7 @@ module.exports = {
         let parameters=context.parameters;
         parameters.supermarkets=true;
         agent.context.set('global', 10, parameters);
-        agent.add(`Got you, Do you have any more preferences?`);
+        agent.add(`Got you, near the supermarkets, Do you have any more preferences?`);
     }
 
 };
