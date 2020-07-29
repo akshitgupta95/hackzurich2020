@@ -34,7 +34,7 @@ module.exports = {
 
         agent.add("[debug]"+response);
         agent.add("I suggest the following option for you.");
-        if(houseType.toString().toUpperCase()==="studio".toUpperCase() && context.parameters.registration && context.parameters.supermarkets && duration.toString().toUpperCase()==="1".toUpperCase() && travelTime.toString().toUpperCase()==="10".toUpperCase()) {
+        if(houseType && houseType.toString().toUpperCase()==="studio".toUpperCase() && context.parameters.registration && context.parameters.supermarkets && duration.toString().toUpperCase()==="1".toUpperCase() && travelTime.toString().toUpperCase()==="10".toUpperCase()) {
             agent.add(new Payload(agent.UNSPECIFIED, {
                 "richContent": [
                     [
