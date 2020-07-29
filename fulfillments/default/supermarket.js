@@ -1,5 +1,5 @@
 
-
+const {Payload} =require("dialogflow-fulfillment");
 module.exports = {
 
     fulfillment: function (agent) {
@@ -7,8 +7,34 @@ module.exports = {
         let context = agent.contexts["0"];
         let parameters=context.parameters;
         parameters.supermarkets=true;
-        agent.context.set('global', 10, parameters);
-        agent.add(`Got you, near the supermarkets, Do you have any more preferences?`);
+        agent.context.set('global', 20, parameters);
+        agent.add(`Got you, near the supermarkets. What other preferences do you have?`);
+        agent.add(new Payload(agent.UNSPECIFIED,{
+            "richContent": [
+                [
+                    {
+                        "type": "chips",
+                        "options": [
+                            {
+                                "text": "Municipality Registration"
+                            },
+                            {
+                                "text": "Travel Time",
+                            },
+                            {
+                                "text": "Max Budget",
+                            },
+                            {
+                                "text": "Rent Duration",
+                            },
+                            {
+                                "text": "No other preference",
+                            }
+                        ]
+                    }
+                ]
+            ]
+        },{ sendAsMessage: true, rawPayload: true }));
     }
 
 };

@@ -3,9 +3,12 @@ const {Payload} =require("dialogflow-fulfillment");
 module.exports = {
 
     fulfillment: function (agent) {
-        let amount=agent.parameters.number;
 
-        agent.add(`Got it, ${amount} Euros. Any more preferences you would like me to know about?`);
+        let context = agent.contexts["0"];
+        let parameters=context.parameters;
+        parameters.registration=true;
+        agent.context.set('global', 40, parameters);
+        agent.add(`Got it, you need municipality registration. Any other preferences you would like me to know about?`);
         agent.add(new Payload(agent.UNSPECIFIED,{
             "richContent": [
                 [
@@ -13,10 +16,10 @@ module.exports = {
                         "type": "chips",
                         "options": [
                             {
-                                "text": "Municipality Registration"
+                                "text": "Travel Time",
                             },
                             {
-                                "text": "Travel Time",
+                                "text": "Max Budget",
                             },
                             {
                                 "text": "Rent Duration",
