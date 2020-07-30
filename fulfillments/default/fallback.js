@@ -21,6 +21,9 @@ module.exports = {
                                 "text": "Municipality Registration"
                             },
                             {
+                                "text": "House Type"
+                            },
+                            {
                                 "text": "Travel Time",
                             },
                             {
