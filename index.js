@@ -17,6 +17,8 @@ const f_travel = require('./fulfillments/default/travelIntent');
 const f_superMarket = require('./fulfillments/default/supermarket');
 const f_municipality = require('./fulfillments/default/municipalityIntent');
 const f_final = require('./fulfillments/default/NoMoreConstraintsIntent');
+const f_submit = require('./fulfillments/default/ConfirmSubmission');
+const f_tryagain = require('./fulfillments/default/tryagain');
 
 
 
@@ -43,6 +45,9 @@ app.post('/', express.json(), (req, res) => {
   intentMap.set('SupermarketIntent', f_superMarket.fulfillment);
   intentMap.set('municipalityIntent', f_municipality.fulfillment);
   intentMap.set('NoMoreConstraintsIntent', f_final.fulfillment);
+  intentMap.set('ConfirmSubmission', f_submit.fulfillment);
+  intentMap.set('tryagain', f_tryagain.fulfillment);
+
 
 
 
