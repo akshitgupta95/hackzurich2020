@@ -1,5 +1,7 @@
 let continueButton = document.getElementById('continue');
 continueButton.disabled = true;
+
+
 window.addEventListener('df-response-received', function (event) {
     // Handle event
     try{
