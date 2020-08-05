@@ -1,8 +1,15 @@
 const { Card} = require('dialogflow-fulfillment');
 const {Payload} =require("dialogflow-fulfillment");
+var House = require("./models/house");
+var Scenario = require("./models/scenarios");
+
+
 module.exports = {
 
     fulfillment: function (agent) {
+        let workerIdandSession=JSON.parse(agent.originalRequest.payload.userId);
+        return Scenario.find({id : workerIdandSession.scenarioId}).populate('correctHouse')
+            .then( data => {
         let response = "Okay, ";
         let context = agent.contexts.find(x => x.name === "global");
         let secondtry=false;
@@ -192,6 +199,7 @@ module.exports = {
         //     ]
         // },{ sendAsMessage: true, rawPayload: true }));
 
+    });
     }
 
 };

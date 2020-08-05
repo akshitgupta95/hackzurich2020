@@ -1,5 +1,8 @@
-let params = (new URL(document.location)).searchParams;
-let workerID = params.get("workerId");
-console.log(workerID);
+
+let workerID = params.get("wid");
 const dfMessenger = document.querySelector('df-messenger');
-dfMessenger.setAttribute("user-id",workerID.toString());
+if(workerID!=null && scenario!=null) {
+    let serialised={"workerId":workerID.toString(),"scenarioId":scenario.toString()};
+    dfMessenger.setAttribute("user-id", JSON.stringify(serialised));
+}
+

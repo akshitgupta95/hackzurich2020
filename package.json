@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-
     "start": "node index.js"
   },
   "keywords": [
@@ -23,7 +22,8 @@
     "axios": "^0.19.0",
     "dialogflow-fulfillment": "^0.6.1",
     "express": "^4.17.1",
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "mongoose": "^5.9.27"
   },
   "devDependencies": {
     "ngrok": "^3.2.5"
