@@ -8,7 +8,7 @@ module.exports = {
 
     fulfillment: function (agent) {
         let workerIdandSession=JSON.parse(agent.originalRequest.payload.userId);
-        return Scenario.find({id : workerIdandSession.scenarioId}).populate('correctHouse')
+        return Scenario.findOne({id : workerIdandSession.scenarioId}).populate('correctHouse')
             .then( data => {
         let response = "Okay, ";
         let context = agent.contexts.find(x => x.name === "global");
@@ -47,159 +47,252 @@ module.exports = {
 
         agent.add("[debug]"+response);
         agent.add("I suggest the following option for you.");
-        if(houseType && houseType.toString().toUpperCase()==="studio".toUpperCase() && context.parameters.registration && context.parameters.supermarkets && duration.toString().toUpperCase()==="1".toUpperCase() && travelTime.toString().toUpperCase()==="10".toUpperCase()) {
-            if (secondtry) {
+        // if(Firstry)
+        //     if(checkConstraints()){
+        //
+        //     ShowCorrectHouse
+        //         end conv
+        //     }
+        //     else show Incorrect Random house
+        //             try again
+        // else{
+        //     if(checkConstraints)
+        //         ShowCorrectHouse
+        //             end conv
+        //         }
+        //     else show Incorrect Random house
+        //         end conv
+        let foundAllConstraints=false;
+        if(!secondtry){
+            if(foundAllConstraints){
+                //show correct house here and end
+                let houseToShow=data.correctHouse;
+                showHouseAndEnd(houseToShow,agent);
 
-                agent.add(new Payload(agent.UNSPECIFIED, {
-                    "richContent": [
-                        [
-                            {
-                                "type": "image",
-                                "rawUrl": "https://www.xior.nl/cache/building/443/thumb/0_400_8-.jpg",
-                                "accessibilityText": "Dialogflow across platforms"
-                            },
-                            {
-                                "type": "info",
-                                "title": "Xior Barbarasteeg",
-                                "subtitle": "Studio with Rent: Euro 440 \n Location: Barbarasteeg 2, Delft \n Minimum Contract: 12 months with Municipality Registration \n Additonals: In front of Delft Station, 8 minutes to TU and near the city centre and the market",
-                            }
-                        ]
-                        ]
-
-
-                }, {sendAsMessage: true, rawPayload: true}));
-                agent.end("This task is now complete. Click the continue button in left of your screen to proceed");
             }
+            else{
+                //show random incorrect house here and ask for try again
+                let correctHouse=data.correctHouse;
+                return House.find({ _id: {$ne: correctHouse._id}})
+                    .then(data => {
+                        let incorrectHouse=data[Math.floor(Math.random() * data.length)];
+                        showHouseAndRetry(incorrectHouse,agent)
+                    });
 
-
-             else {
-                agent.add(new Payload(agent.UNSPECIFIED, {
-                    "richContent": [
-                        [
-                            {
-                                "type": "image",
-                                "rawUrl": "https://www.xior.nl/cache/building/443/thumb/0_400_8-.jpg",
-                                "accessibilityText": "Dialogflow across platforms"
-                            },
-                            {
-                                "type": "info",
-                                "title": "Xior Barbarasteeg",
-                                "subtitle": "Studio with Rent: Euro 440 \n Location: Barbarasteeg 2, Delft \n Minimum Contract: 12 months with Municipality Registration \n Additonals: In front of Delft Station, 8 minutes to TU and near the city centre and the market",
-                            }
-                        ],
-                        [
-                            {
-                                "type": "description",
-                                "title": "Do you want to submit this task or try again?",
-                            }
-
-                        ],
-                        [
-                            {
-                                "type": "chips",
-                                "options": [
-                                    {
-                                        "text": "Submit"
-                                    },
-                                    {
-                                        "text": "Try Again",
-                                    }
-                                ]
-                            }
-                        ]
-                    ]
-                }, {sendAsMessage: true, rawPayload: true}));
             }
         }
-        else {
-            if(secondtry){
-                agent.add(new Payload(agent.UNSPECIFIED, {
-                    "richContent": [
-                        [
-                            {
-                                "type": "image",
-                                "rawUrl": "https://www.duwo.nl/typo3temp/assets/_processed_/e/4/csm_image_242c92203779372268c56935ccaa57ab_005_roland_holstlaan_p1020792020_2364ec3ebe.jpg",
-                                "accessibilityText": "Dialogflow across platforms"
-                            },
-                            {
-                                "type": "info",
-                                "title": "Roland Holstlaan",
-                                "subtitle": "Studio with Rent: Euro 500 \n Location: Roland Holstlaan, Delft  \n Additonals: Near Delft South, 12 minutes to TU",
-                            }
-                        ]
-                    ]
-
-                }, {sendAsMessage: true, rawPayload: true}));
-                agent.end("This task is now complete. Click the continue button in left of your screen to proceed");
+        else{ //second and last try
+            if(foundAllConstraints){
+                //show correct house here and end
+                let houseToShow=data.correctHouse;
+                showHouseAndEnd(houseToShow,agent);
 
             }
-            else {
-                agent.add(new Payload(agent.UNSPECIFIED, {
-                    "richContent": [
-                        [
-                            {
-                                "type": "image",
-                                "rawUrl": "https://www.duwo.nl/typo3temp/assets/_processed_/e/4/csm_image_242c92203779372268c56935ccaa57ab_005_roland_holstlaan_p1020792020_2364ec3ebe.jpg",
-                                "accessibilityText": "Dialogflow across platforms"
-                            },
-                            {
-                                "type": "info",
-                                "title": "Roland Holstlaan",
-                                "subtitle": "Studio with Rent: Euro 500 \n Location: Roland Holstlaan, Delft  \n Additonals: Near Delft South, 12 minutes to TU",
-                            }
-                        ],
-                        [
-                            {
-                                "type": "description",
-                                "title": "Do you want to submit this task or try again?",
-                            }
-
-                        ],
-                        [
-                            {
-                                "type": "chips",
-                                "options": [
-                                    {
-                                        "text": "Submit"
-                                    },
-                                    {
-                                        "text": "Try Again",
-                                    }
-                                ]
-                            }
-                        ]
-
-                    ],
-
-                }, {sendAsMessage: true, rawPayload: true}));
+        else{
+                //show random incorrect house here and end
+                let correctHouse=data.correctHouse;
+                return House.find({ _id: {$ne: correctHouse._id}})
+                    .then(data => {
+                        let incorrectHouse= data[Math.floor(Math.random() * data.length)];
+                        showHouseAndEnd(incorrectHouse,agent)
+                    });
             }
+
         }
-        // agent.add("1. Xior Barbarasteeg\n Rent: Euro 440 \n Location: Barbarasteed 2C2, Delft \n Additonals: In front of Delft Station, 8 minutes to TU" );
-        // agent.add("2. Roland Holstlaan\n Rent: Euro 500 \n Location: Roland Holstlaan, Delft \n Additonals: Near Delft South, 12 minutes to TU");
 
 
-        // agent.end(new Payload(agent.SLACK,{
-        //     "richContent": [
-        //         [
-        //             {
-        //                 "type": "button",
-        //                 "icon": {
-        //                     "type": "chevron_right",
-        //                     "color": "#FF9800"
-        //                 },
-        //                 "text": "Proceed",
-        //                 "link": "https://fs11.formsite.com/V9PQWO/hnvnvvqayi/index.html",
-        //                 "event": {
-        //                     "name": "",
-        //                     "languageCode": "",
-        //                     "parameters": {}
-        //                 }
-        //             }
-        //         ]
-        //     ]
-        // },{ sendAsMessage: true, rawPayload: true }));
+
+        // if(houseType && houseType.toString().toUpperCase()==="studio".toUpperCase() && context.parameters.registration && context.parameters.supermarkets && duration.toString().toUpperCase()==="1".toUpperCase() && travelTime.toString().toUpperCase()==="10".toUpperCase()) {
+        //     if (secondtry) {
+        //
+        //         agent.add(new Payload(agent.UNSPECIFIED, {
+        //             "richContent": [
+        //                 [
+        //                     {
+        //                         "type": "image",
+        //                         "rawUrl": "https://www.xior.nl/cache/building/443/thumb/0_400_8-.jpg",
+        //                         "accessibilityText": "Dialogflow across platforms"
+        //                     },
+        //                     {
+        //                         "type": "info",
+        //                         "title": "Xior Barbarasteeg",
+        //                         "subtitle": "Studio with Rent: Euro 440 \n Location: Barbarasteeg 2, Delft \n Minimum Contract: 12 months with Municipality Registration \n Additonals: In front of Delft Station, 8 minutes to TU and near the city centre and the market",
+        //                     }
+        //                 ]
+        //                 ]
+        //
+        //
+        //         }, {sendAsMessage: true, rawPayload: true}));
+        //         agent.end("This task is now complete. Click the continue button in left of your screen to proceed");
+        //     }
+        //
+        //
+        //      else {
+        //         agent.add(new Payload(agent.UNSPECIFIED, {
+        //             "richContent": [
+        //                 [
+        //                     {
+        //                         "type": "image",
+        //                         "rawUrl": "https://www.xior.nl/cache/building/443/thumb/0_400_8-.jpg",
+        //                         "accessibilityText": "Dialogflow across platforms"
+        //                     },
+        //                     {
+        //                         "type": "info",
+        //                         "title": "Xior Barbarasteeg",
+        //                         "subtitle": "Studio with Rent: Euro 440 \n Location: Barbarasteeg 2, Delft \n Minimum Contract: 12 months with Municipality Registration \n Additonals: In front of Delft Station, 8 minutes to TU and near the city centre and the market",
+        //                     }
+        //                 ],
+        //                 [
+        //                     {
+        //                         "type": "description",
+        //                         "title": "Do you want to submit this task or try again?",
+        //                     }
+        //
+        //                 ],
+        //                 [
+        //                     {
+        //                         "type": "chips",
+        //                         "options": [
+        //                             {
+        //                                 "text": "Submit"
+        //                             },
+        //                             {
+        //                                 "text": "Try Again",
+        //                             }
+        //                         ]
+        //                     }
+        //                 ]
+        //             ]
+        //         }, {sendAsMessage: true, rawPayload: true}));
+        //     }
+        // }
+        // else {
+        //     if(secondtry){
+        //         agent.add(new Payload(agent.UNSPECIFIED, {
+        //             "richContent": [
+        //                 [
+        //                     {
+        //                         "type": "image",
+        //                         "rawUrl": "https://www.duwo.nl/typo3temp/assets/_processed_/e/4/csm_image_242c92203779372268c56935ccaa57ab_005_roland_holstlaan_p1020792020_2364ec3ebe.jpg",
+        //                         "accessibilityText": "Dialogflow across platforms"
+        //                     },
+        //                     {
+        //                         "type": "info",
+        //                         "title": "Roland Holstlaan",
+        //                         "subtitle": "Studio with Rent: Euro 500 \n Location: Roland Holstlaan, Delft  \n Additonals: Near Delft South, 12 minutes to TU",
+        //                     }
+        //                 ]
+        //             ]
+        //
+        //         }, {sendAsMessage: true, rawPayload: true}));
+        //         agent.end("This task is now complete. Click the continue button in left of your screen to proceed");
+        //
+        //     }
+        //     else {
+        //         agent.add(new Payload(agent.UNSPECIFIED, {
+        //             "richContent": [
+        //                 [
+        //                     {
+        //                         "type": "image",
+        //                         "rawUrl": "https://www.duwo.nl/typo3temp/assets/_processed_/e/4/csm_image_242c92203779372268c56935ccaa57ab_005_roland_holstlaan_p1020792020_2364ec3ebe.jpg",
+        //                         "accessibilityText": "Dialogflow across platforms"
+        //                     },
+        //                     {
+        //                         "type": "info",
+        //                         "title": "Roland Holstlaan",
+        //                         "subtitle": "Studio with Rent: Euro 500 \n Location: Roland Holstlaan, Delft  \n Additonals: Near Delft South, 12 minutes to TU",
+        //                     }
+        //                 ],
+        //                 [
+        //                     {
+        //                         "type": "description",
+        //                         "title": "Do you want to submit this task or try again?",
+        //                     }
+        //
+        //                 ],
+        //                 [
+        //                     {
+        //                         "type": "chips",
+        //                         "options": [
+        //                             {
+        //                                 "text": "Submit"
+        //                             },
+        //                             {
+        //                                 "text": "Try Again",
+        //                             }
+        //                         ]
+        //                     }
+        //                 ]
+        //
+        //             ],
+        //
+        //         }, {sendAsMessage: true, rawPayload: true}));
+        //     }
+        // }
 
     });
     }
 
 };
+
+function showHouseAndEnd(house,agent) {
+    console.log(house.url);
+    agent.add(new Payload(agent.UNSPECIFIED, {
+        "richContent": [
+            [
+                {
+                    "type": "image",
+                    "rawUrl": house.url,
+                    "accessibilityText": "the shown house"
+                },
+                {
+                    "type": "info",
+                    "title": house.name,
+                    "subtitle": house.summary
+                }
+            ]
+        ]
+
+
+    }, {sendAsMessage: true, rawPayload: true}));
+    agent.end("This task is now complete. Click the continue button in left of your screen to proceed");
+}
+
+function showHouseAndRetry(house,agent) {
+    agent.add(new Payload(agent.UNSPECIFIED, {
+        "richContent": [
+            [
+                {
+                    "type": "image",
+                    "rawUrl": house.url,
+                    "accessibilityText": "the shown house"
+                },
+                {
+                    "type": "info",
+                    "title": house.name,
+                    "subtitle": house.summary
+                }
+            ],
+            [
+                {
+                    "type": "description",
+                    "title": "Do you want to submit this task or try again?",
+                }
+
+            ],
+            [
+                {
+                    "type": "chips",
+                    "options": [
+                        {
+                            "text": "Submit"
+                        },
+                        {
+                            "text": "Try Again",
+                        }
+                    ]
+                }
+            ]
+        ]
+    }, {sendAsMessage: true, rawPayload: true}));
+}
