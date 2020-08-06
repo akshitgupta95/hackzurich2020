@@ -80,7 +80,7 @@ module.exports = {
                 //     else show Incorrect Random house
                 //         end conv
                 let foundAllConstraints = checkAllConstraints(data.constraints, inputConstraints);
-                ;
+
                 if (!secondtry) {
                     if (foundAllConstraints) {
                         //show correct house here and end

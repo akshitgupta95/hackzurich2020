@@ -1,7 +1,13 @@
 const express = require('express');
 const path = require('path');
 const { WebhookClient} = require('dialogflow-fulfillment');
+const bodyParser = require('body-parser');
 const app = express();
+// Parse URL-encoded bodies (as sent by HTML forms)
+app.use(express.urlencoded());
+// Parse JSON bodies (as sent by API clients)
+app.use(express.json());
+
 var mongoose=require('mongoose');
 var House = require("./fulfillments/default/models/house");
 var Scenario = require("./fulfillments/default/models/scenarios");
@@ -144,3 +150,56 @@ app.route('/getScenarioAndHouse').get(async (req, res) => {
   const scenario = await Scenario.findOne( {id : scenarioId}).populate('correctHouse');
   res.send(scenario);
 });
+
+app.route('/checkConstraints').post(async (req, res) => {
+  let scenarioId = 1;
+  if(req.body.sid!=="null")
+    scenarioId = req.body.sid;
+  const scenario = await Scenario.findOne( {id : scenarioId});
+  let response=checkAllConstraints(scenario.constraints, req.body.inputConstraints);
+  res.send(response);
+});
+
+
+function checkAllConstraints(scenarioConstraints, inputConstraints) {
+  let unmetConstraints = [];
+  if (scenarioConstraints.nearSupermarkets) {
+    if (!inputConstraints.nearSupermarkets)
+      unmetConstraints.push("nearSupermarkets");
+  }
+  if (scenarioConstraints.municipalityRegistration) {
+    if (!inputConstraints.municipalityRegistration)
+      unmetConstraints.push("municipalityRegistration");
+  }
+  if (scenarioConstraints.typeOfAccomodation.toString().toUpperCase() !== inputConstraints.typeOfAccomodation.toString().toUpperCase())
+    unmetConstraints.push("typeOfAccomodation");
+  if (scenarioConstraints.commuteTime != -1) {//there is a commute time constraint
+    if (!inputConstraints.commuteTime)//no commute time given by user
+      unmetConstraints.push("commuteTime");
+    else {
+      if (scenarioConstraints.commuteTime.toString() !== inputConstraints.commuteTime.toString())
+        unmetConstraints.push("commuteTime");
+    }
+  }
+  if (scenarioConstraints.maxRent != -1) {
+    if (!inputConstraints.maxRent)//no max rent given by user
+      unmetConstraints.push("maxRent");
+    else {
+      if (scenarioConstraints.maxRent.toString() !== inputConstraints.maxRent.toString())
+        unmetConstraints.push("maxRent");
+    }
+  }
+  if (scenarioConstraints.duration.value != -1) {//there is a duration constraint // in db always store months
+    if (!inputConstraints.duration.value)//no duration given by user
+      unmetConstraints.push("duration");
+    else {
+      if (scenarioConstraints.duration.value.toString() !== inputConstraints.duration.value.toString())
+        unmetConstraints.push("duration");
+    }
+  }
+  if (!Array.isArray(unmetConstraints) || !unmetConstraints.length)
+    return true;
+  else
+    return false;
+
+}
