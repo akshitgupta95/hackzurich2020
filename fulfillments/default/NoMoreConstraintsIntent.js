@@ -248,7 +248,7 @@ function showHouseAndEnd(house,agent) {
                 {
                     "type": "info",
                     "title": house.name,
-                    "subtitle": house.summary
+                    "subtitle": house.summary.toString()
                 }
             ]
         ]

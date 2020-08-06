@@ -123,3 +123,24 @@ app.route('/getScenario').get(async (req, res) => {
   const scenario = await Scenario.findOne( {id : scenarioId});
   res.send(scenario);
 });
+
+app.route('/getAllHouses').get(async (req, res) => {
+  const houses = await House.find();
+  res.send(houses);
+});
+
+app.route('/getIncorrectHouses').get(async (req, res) => {
+  let correctHouseId = 1;
+  if(req.query.hid!=="null")
+    correctHouseId = req.query.hid;
+  const houses = await House.find({ _id: {$ne: correctHouseId}});
+  res.send(houses);
+});
+
+app.route('/getScenarioAndHouse').get(async (req, res) => {
+  let scenarioId = 1;
+  if(req.query.sid!=="null")
+    scenarioId = req.query.sid;
+  const scenario = await Scenario.findOne( {id : scenarioId}).populate('correctHouse');
+  res.send(scenario);
+});
