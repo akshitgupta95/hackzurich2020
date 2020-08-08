@@ -79,20 +79,20 @@ app.get('/error', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/pages/error.html'));
 });
 
-app.get('/', function (req, res) {
+app.get('/ati', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/forms/ati-ci.html'));
     //__dirname : It will resolve to your project folder.
 });
 
-app.get('/task', function (req, res) {
+app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
-app.get('/exit', function (req, res) {
+app.get('/resque', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/forms/resque.html'));
 });
 
-app.post('/task', express.json(), (req, res) => {
+app.post('/', express.json(), (req, res) => {
 
     const agent = new WebhookClient({ request: req, response: res });
     let intentMap = new Map();
@@ -139,6 +139,11 @@ app.route('/getScenario').get(async (req, res) => {
   const scenario = await Scenario.findOne( {id : scenarioId});
   res.send(scenario);
 });
+
+app.route('/Scenarios/count').get(async (req, res) => {
+    const scenarios = await Scenario.estimatedDocumentCount();
+    res.send({ "count": scenarios });
+})
 
 app.route('/getAllHouses').get(async (req, res) => {
   const houses = await House.find();
