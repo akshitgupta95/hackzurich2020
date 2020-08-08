@@ -178,12 +178,12 @@
 
         // Get worker Id:
         var params = (new URL(document.location)).searchParams;
-        var workerID = params.get("workerId");
+        var workerID = params.get("wid");
 
         console.log(workerID);
         document.getElementById("workerId").value = workerID;
 
-        var url = "/task?workerId=" + workerID;
+        var url = "/task?wid=" + workerID;
         window.onload = function () {
             var time = new Date();
             document.getElementById("startTime").value = time;
