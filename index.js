@@ -88,7 +88,7 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
-app.get('/resque', function (req, res) {
+app.get('/exit', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/forms/resque.html'));
 });
 
@@ -143,7 +143,7 @@ app.route('/getScenario').get(async (req, res) => {
 app.route('/Scenarios/count').get(async (req, res) => {
     const scenarios = await Scenario.estimatedDocumentCount();
     res.send({ "count": scenarios });
-})
+});
 
 app.route('/getAllHouses').get(async (req, res) => {
   const houses = await House.find();
