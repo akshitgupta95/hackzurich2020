@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crowd Computing</title>
-  <link rel="stylesheet" href="css/main.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crowd Computing</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -54,6 +55,15 @@
 <!--  </iframe>-->
 </div>
 <script src="app.js"></script>
+<script>
+    var url = "/exit?wid=" + workerID;
+
+    $("#continue").click(function (event) {
+        window.location.href = url;
+        event.preventDefault();
+    });
+
+</script>
 
 </body>
 
