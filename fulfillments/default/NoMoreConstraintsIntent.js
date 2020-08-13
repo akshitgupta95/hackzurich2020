@@ -63,22 +63,6 @@ module.exports = {
                     "maxRent": context.parameters.number != null ? context.parameters.number : null
                 };
 
-
-                // if(Firstry)
-                //     if(checkConstraints()){
-                //
-                //     ShowCorrectHouse
-                //         end conv
-                //     }
-                //     else show Incorrect Random house
-                //             try again
-                // else{
-                //     if(checkConstraints)
-                //         ShowCorrectHouse
-                //             end conv
-                //         }
-                //     else show Incorrect Random house
-                //         end conv
                 let foundAllConstraints = checkAllConstraints(data.constraints, inputConstraints);
 
                 if (!secondtry) {
@@ -293,7 +277,8 @@ function checkAllConstraints(scenarioConstraints, inputConstraints) {
 }
 
 function showHouseAndEnd(house, agent) {
-    console.log(house.url);
+    let summary=house.summary.toString();
+    var formattedSummary = summary.replace(/\\n/g,'\n');
     agent.add(new Payload(agent.UNSPECIFIED, {
         "richContent": [
             [
@@ -305,7 +290,7 @@ function showHouseAndEnd(house, agent) {
                 {
                     "type": "info",
                     "title": house.name,
-                    "subtitle": house.summary.toString()
+                    "subtitle": formattedSummary
                 }
             ]
         ]
@@ -316,6 +301,9 @@ function showHouseAndEnd(house, agent) {
 }
 
 function showHouseAndRetry(house, agent) {
+
+    let summary=house.summary.toString();
+    var formattedSummary = summary.replace(/\\n/g,'\n');
     agent.add(new Payload(agent.UNSPECIFIED, {
         "richContent": [
             [
@@ -327,7 +315,7 @@ function showHouseAndRetry(house, agent) {
                 {
                     "type": "info",
                     "title": house.name,
-                    "subtitle": house.summary
+                    "subtitle": formattedSummary
                 }
             ],
             [
