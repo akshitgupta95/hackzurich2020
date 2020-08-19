@@ -13,6 +13,7 @@ app.use(express.json());
 var mongoose=require('mongoose');
 var House = require("./fulfillments/default/models/house");
 var Scenario = require("./fulfillments/default/models/scenarios");
+var Worker=require("./fulfillments/default/models/worker");
 
 // Database Connectivity
 var mongoDB = 'mongodb+srv://akshitgupta:akshitgupta@cluster0.jvxlv.mongodb.net/clinteastwood?retryWrites=true&w=majority';
@@ -25,26 +26,26 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
-// var house = new House({ name:"Oostblok, Delft",
-//   description:"fully furnished loft studio",
-//   summary:"Rent:EUR 715 Near the City Centre Min Contract Duration: 1.5 years (can be extended)",
-//   url:"https://resources.directwonen.nl/image/020fe039-1cc9-464c-9db2-3f860249eae4" });
-//
+// var house = new House({ name:"Ruivenstraat, Delft",
+//   description:"Furnished Room in Shared house",
+//   summary:"Rent:EUR 375 Registration Possible 6 minutes commute to TU Delft Min contract: 1 year Private Room",
+//   url:"https://resources.kamernet.nl/webp/43545674-bae0-403d-8c1f-b95e17e0d28b/resize/680-452" });
+
 // House.create(house, function (err, awesome_instance) {
 //   if (err) return handleError(err);
 //   // saved!
 //   var scene = new Scenario({
 //     id:3,
-//     description:"Jan is a Dutch citizen moving to Delft for a PhD. He is looking for a Studio Apartment for at least 2 years, with a maximum budget of 750 euros. He needs his place to be close to supermarket and does not mind the commute time to the university.",
+//     description:"Aman is looking for a shared apartment with a private room in Delft. He is an international student and has moved to study at the TU for his Bachelor’s degree. He wants a place close to the university with less than 8 minutes commute time and requires registration at the municipality. His main requirement is that the rent of the place should be less than 400 euros along with a long term contract of at least an year.",
 //     constraints:{
-//       nearSupermarkets:true,
-//       municipalityRegistration:false,
-//       typeOfAccomodation:"Studio",
-//       commuteTime:9999,
+//       nearSupermarkets:false,
+//       municipalityRegistration:true,
+//       typeOfAccomodation:"Private Room",
+//       commuteTime:8,
 //       duration:{
-//         value:2,
-//         unit:"yr"},
-//       maxRent:750,
+//         value:12,
+//         unit:"mo"},
+//       maxRent:400,
 //       } ,
 //     correctHouse:house._id// assign the _id from the our author Bob. This ID is created by default!
 //   });
@@ -175,6 +176,83 @@ app.route('/checkConstraints').post(async (req, res) => {
   res.send(response);
 });
 
+app.route('/getWorkerScenario').get(async (req, res) => {
+    let workerId = 1;
+    if(req.query.wid!=="null")
+        workerId = req.query.wid;
+
+    const worker = await Worker.findOne( {id : workerId});
+    if(worker==null) {
+        let complexScenario = getRandomInt(3);
+        let complexScenarioCompleted = [];
+        for (let i = 0; i < 3; i++) {
+            if (complexScenario-1 != i)
+                complexScenarioCompleted[i] = false;
+            else
+                complexScenarioCompleted[i] = true;
+        }
+
+        let easyScenario = 3+getRandomInt(3);
+        let easyScenarioCompleted = [];
+        for (let i = 0; i < 3; i++) {
+            if (easyScenario-4 != i)
+                easyScenarioCompleted[i] = false;
+            else
+                easyScenarioCompleted[i] = true;
+        }
+
+        let _worker = new Worker({
+            id: workerId,
+            completedComplexScenario: complexScenarioCompleted,
+            completedEasyScenario: easyScenarioCompleted
+
+        });
+        await _worker.save();
+        let response={
+            complexScenario:complexScenario,
+            easyScenario:easyScenario
+
+        };
+
+        res.json(response);
+    }
+    else {
+        let complexScenarioCompleted=worker.completedComplexScenario;
+        let complexScenario = 1+complexScenarioCompleted.indexOf(false);
+        for (let i = 0; i < 3; i++) {
+            if (complexScenario-1 == i)
+                complexScenarioCompleted[i] = true;
+        }
+
+        let easyScenarioCompleted=worker.completedEasyScenario;
+        let easyScenario = 4+easyScenarioCompleted.indexOf(false);
+        for (let i = 0; i < 3; i++) {
+            if (easyScenario-4 == i)
+                easyScenarioCompleted[i] = true;
+        }
+
+
+        await worker.update({completedComplexScenario:complexScenarioCompleted,completedEasyScenario: easyScenarioCompleted});
+        if(complexScenario!=0) {
+            let response = {
+                complexScenario: complexScenario,
+                easyScenario: easyScenario
+
+            };
+            res.json(response);
+        }
+        else{
+            res.status(400);
+            res.send("You have already completed 3 sessions")
+        }
+    }
+
+
+});
+
+function getRandomInt(max) {
+    return 1+Math.floor(Math.random() * Math.floor(max));
+}
 
 function checkAllConstraints(scenarioConstraints, inputConstraints) {
   let unmetConstraints = [];
