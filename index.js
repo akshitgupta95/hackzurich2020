@@ -74,6 +74,7 @@ const f_municipality = require('./fulfillments/default/municipalityIntent');
 const f_final = require('./fulfillments/default/NoMoreConstraintsIntent');
 const f_submit = require('./fulfillments/default/ConfirmSubmission');
 const f_tryagain = require('./fulfillments/default/tryagain');
+const f_feeling = require('./fulfillments/default/feelingIntent');
 
 
 // app.get('/error', function (req, res) {
@@ -100,7 +101,7 @@ app.post('/', express.json(), (req, res) => {
 
     intentMap.set('Default Welcome Intent', f_welcome.fulfillment);
     intentMap.set('Default Fallback Intent', f_fallback.fulfillment);
-    intentMap.set('NameIntent', f_name.fulfillment);
+    intentMap.set('nameIntent', f_name.fulfillment);
     intentMap.set('TypeOfHouse', f_houseType.fulfillment);
     intentMap.set('TypeOfHouse - no', f_houseTypeNo.fulfillment);
     intentMap.set('TypeOfHouse - yes', f_houseTypeYes.fulfillment);
@@ -112,6 +113,7 @@ app.post('/', express.json(), (req, res) => {
     intentMap.set('NoMoreConstraintsIntent', f_final.fulfillment);
     intentMap.set('ConfirmSubmission', f_submit.fulfillment);
     intentMap.set('tryagain', f_tryagain.fulfillment);
+    intentMap.set('feelingIntent', f_feeling.fulfillment);
 
 
     // Todo: connect each custom intent with custom fulfillment modules

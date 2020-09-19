@@ -4,13 +4,12 @@
  */
 
 
-
+const {Payload} =require("dialogflow-fulfillment");
 
 module.exports = {
 
   fulfillment: function (agent) {
-    agent.add('Hi! This is a conversational interface to suggest housing options in Delft. My name is Clint. What\'s your name?')
-
+    agent.add('Hi! My name is Alex from Roche and I am here to help you. What\'s your name?');
   }
 
 };
