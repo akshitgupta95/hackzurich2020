@@ -1,34 +1,44 @@
+var Feeling = require("./models/feelings");
 
 const {Payload} =require("dialogflow-fulfillment");
 module.exports = {
 
-    fulfillment: function (agent) {
+    fulfillment: async function (agent) {
         let feelingType=agent.parameters.feeling;
-        // agent.add(`Okay! so, you are feeling ${feelingType}.`);
+        var userID = agent.originalRequest.payload.data.chat.id
+        var feelingInstance = new Feeling({ userID: userID, feeling: feelingType.toString().toUpperCase(), date: Date.now() });
+
+        // Save thefeelingInstance to the database
+        await feelingInstance.save(function (err) {
+            if (err) return console.log(err);
+        }
+        );
+
         if(feelingType.toString().toUpperCase()==="GOOD"){
             agent.add(`Nice to hear that`);
-            agent.add('Would you like to take test your glucose level?');
-            agent.add(new Payload(agent.UNSPECIFIED,{
-                "richContent": [
-                    [
-                        {
-                            "type": "chips",
-                            "options": [
-                                {
-                                    "text": "Yes"
-                                },
-                                {
-                                    "text": "No, I am fine",
-                                }
-                            ]
-                        }
-                    ]
-                ]
+            agent.add(new Payload(agent.TELEGRAM,{
+                "telegram": {
+                    "text": "'Would you like to take test your glucose level?'",
+                    "reply_markup": {
+                      "inline_keyboard": [
+                        [
+                          {
+                            "text": "Yes",
+                            "callback_data": "yes"
+                          }
+                        ],
+                        [
+                          {
+                            "text": "No",
+                            "callback_data": "no"
+                          }
+                        ]
+                      ]
+                    }
+                  }
             },{ sendAsMessage: true, rawPayload: true }));
-
         }
         else if(feelingType.toString().toUpperCase()==="BAD"){
-            //store to db here
             agent.add(`Why are you feeling bad?`);
             agent.add(new Payload(agent.UNSPECIFIED,{
                 "richContent": [
@@ -54,8 +64,25 @@ module.exports = {
         else{//user feeling okay
             agent.add(`Show okay suggestions here`);
         }
-
-
     }
-
 };
+
+function testMongoDB() {
+var Schema = mongoose.Schema;
+var FeelingsSchema = new Schema({
+  feeling: String,
+  date: String,
+},
+{collection: "users"});
+
+var feeling_model = mongoose.model('Feeling', FeelingsSchema );
+
+// Create an instance of model SomeModel
+var awesome_instance = new feeling_model({ feeling: 'very good', date: '19:9.' });
+
+// Save the new model instance, passing a callback
+awesome_instance.save(function (err) {
+  if (err) return console.log(err);
+  // saved!
+});
+}
