@@ -8,7 +8,7 @@ module.exports = {
         // agent.add("Have a Nice Day!");
 
     
-        if (agent.requestSource == "TELEGRAM") {
+        if (agent.requestSource === "TELEGRAM") {
             agent.add(new Payload(agent.TELEGRAM, {
                 "image": {
                     "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Felis_silvestris_silvestris_small_gradual_decrease_of_quality.png"
