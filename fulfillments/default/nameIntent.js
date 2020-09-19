@@ -5,7 +5,7 @@ module.exports = {
 
     fulfillment: async function (agent) {
         let name=agent.parameters.name;
-        let userID = agent.originalRequest.payload.data.chat.id;
+        let userID = agent.originalRequest.payload.data.from.username;
         let nameInstance = new User({ userId: userID, name:name });
         // Save thefeelingInstance to the database
         await nameInstance.save(function (err) {

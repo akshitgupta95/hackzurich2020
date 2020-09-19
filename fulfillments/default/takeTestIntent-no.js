@@ -8,23 +8,14 @@ module.exports = {
         // agent.add("Have a Nice Day!");
 
     
-        agent.add(new Payload(agent.UNSPECIFIED, {
-            "richContent": [
-                [
-                    {
-                        "type": "image",
-                        "rawUrl": "https://github.com/akshitgupta95/hackzurich2020/blob/master/images/JoBrownBear-AgADhQUAAj-VzAo.gif",
-                    },
-                    {
-                        "type": "info",
-                        "title": "Really?",
-                        "subtitle": "The test can give you valuable insight into your health. Next time don't back out!",
-                    }
-                ]
-                ]
+        agent.add(new Payload(agent.TELEGRAM, {
+            "image": {
+                "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Felis_silvestris_silvestris_small_gradual_decrease_of_quality.png"
+            }
 
 
-        }, {sendAsMessage: true, rawPayload: true}));
+            }
+        , {sendAsMessage: true, rawPayload: true}));
         agent.end("This task is now complete. Click the continue button in left of your screen to proceed");
        
     }

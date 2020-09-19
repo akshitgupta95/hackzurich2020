@@ -9,12 +9,13 @@ const {Payload} =require("dialogflow-fulfillment");
 module.exports = {
 
   fulfillment: function (agent) {
-    var userID = agent.originalRequest.payload.data.chat.id;
+    var userID = agent.originalRequest.payload.data.from.username;
+    let name=agent.originalRequest.payload.data.from.first_name;
     return User.findOne({userId: userID})
         .then(data => {
           if(data!=null){
 
-            agent.add(`Welcome back ${data.name}! Alex here from Roche for your help. How are you feeling today?`);
+            agent.add(`Welcome back ${name}! Alex here from Roche for your help. How are you feeling today?`);
             agent.add(new Payload(agent.TELEGRAM,{
               "telegram": {
                 "text": "'Pick your closest feeling'",
@@ -44,7 +45,7 @@ module.exports = {
             },{ sendAsMessage: true, rawPayload: true }));
           }
           else{
-            agent.add(`Hi! My name is Alex from Roche and I am here to help you. What\'s your name?`);
+            agent.add(`Hi ${name}! My name is Alex from Roche and I am here to help you. What\'s your Doctor's name?`);
           }
 
 

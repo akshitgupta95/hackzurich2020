@@ -43,9 +43,9 @@ const f_municipality = require('./fulfillments/default/municipalityIntent');
 const f_final = require('./fulfillments/default/NoMoreConstraintsIntent');
 const f_submit = require('./fulfillments/default/ConfirmSubmission');
 const f_tryagain = require('./fulfillments/default/tryagain');
-const f_feeling = require('./fulfillments/default/feelingIntent');
-const f_feeling_yes = require('./fulfillments/default/feelingIntent-yes');
-const f_feeling_no = require('./fulfillments/default/feelingIntent-no');
+const f_feeling = require('./fulfillments/default/takeTestIntent');
+const f_feeling_yes = require('./fulfillments/default/takeTestIntent-yes');
+const f_feeling_no = require('./fulfillments/default/takeTestIntent-no');
 const f_badfeeling = require('./fulfillments/default/badfeelingIntent');
 const f_overviewIntent = require('./fulfillments/default/overviewIntent');
 
