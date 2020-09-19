@@ -16,27 +16,54 @@ module.exports = {
 
         if(feelingType.toString().toUpperCase()==="GOOD"){
             agent.add(`Nice to hear that`);
-            agent.add(new Payload(agent.TELEGRAM,{
-                "telegram": {
-                    "text": "'Would you like to take test your glucose level?'",
-                    "reply_markup": {
-                      "inline_keyboard": [
-                        [
-                          {
-                            "text": "Yes",
-                            "callback_data": "yes"
-                          }
-                        ],
-                        [
-                          {
-                            "text": "No",
-                            "callback_data": "no"
-                          }
+            if (agent.requestSource == "TELEGRAM") {
+              agent.add(new Payload(agent.TELEGRAM,{
+                  "telegram": {
+                      "text": "'Would you like to take test your glucose level?'",
+                      "reply_markup": {
+                        "inline_keyboard": [
+                          [
+                            {
+                              "text": "Yes",
+                              "callback_data": "yes"
+                            }
+                          ],
+                          [
+                            {
+                              "text": "No",
+                              "callback_data": "no"
+                            }
+                          ]
                         ]
-                      ]
+                      }
                     }
-                  }
+              },{ sendAsMessage: true, rawPayload: true }));
+            } else {
+              agent.add(new Payload(agent.UNSPECIFIED,{
+                "richContent": [
+                    [{
+                      "text": "'Would you like to take test your glucose level?'",
+                      "reply_markup": {
+                        "inline_keyboard": [
+                          [
+                            {
+                              "text": "Yes",
+                              "callback_data": "yes"
+                            }
+                          ],
+                          [
+                            {
+                              "text": "No",
+                              "callback_data": "no"
+                            }
+                          ]
+                        ]
+                      }
+                    }
+                    ]
+                ]
             },{ sendAsMessage: true, rawPayload: true }));
+            }
         }
         else if(feelingType.toString().toUpperCase()==="BAD"){
             agent.add(`Why are you feeling bad?`);
