@@ -1,4 +1,4 @@
-# C.L.I.N.T. EASTWOOD
+# HackZurich 2020
 Conversational Interface using Dialogflow.
 The endpoints for Dialogflow intents are in \fulfillments.
 The UI is in \public
