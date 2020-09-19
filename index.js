@@ -16,7 +16,7 @@ var Scenario = require("./fulfillments/default/models/scenarios");
 var Worker=require("./fulfillments/default/models/worker");
 
 // Database Connectivity
-var mongoDB = 'mongodb+srv://akshitgupta:akshitgupta@cluster0.jvxlv.mongodb.net/clinteastwood?retryWrites=true&w=majority';
+var mongoDB = 'mongodb+srv://user:user@cluster0.lhf19.mongodb.net/hackzurich?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 
 //Get the default connection
