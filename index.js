@@ -75,6 +75,10 @@ const f_final = require('./fulfillments/default/NoMoreConstraintsIntent');
 const f_submit = require('./fulfillments/default/ConfirmSubmission');
 const f_tryagain = require('./fulfillments/default/tryagain');
 const f_feeling = require('./fulfillments/default/feelingIntent');
+const f_feeling_yes = require('./fulfillments/default/feelingIntent-yes');
+const f_feeling_no = require('./fulfillments/default/feelingIntent-no');
+const f_badfeeling = require('./fulfillments/default/badfeelingIntent');
+const f_overviewIntent = require('./fulfillments/default/overviewIntent');
 
 
 // app.get('/error', function (req, res) {
@@ -114,6 +118,10 @@ app.post('/', express.json(), (req, res) => {
     intentMap.set('ConfirmSubmission', f_submit.fulfillment);
     intentMap.set('tryagain', f_tryagain.fulfillment);
     intentMap.set('feelingIntent', f_feeling.fulfillment);
+    intentMap.set('feelingIntent - yes', f_feeling_yes.fulfillment);
+    intentMap.set('feelingIntent - no', f_feeling_no.fulfillment);
+    intentMap.set('badfeelingIntent', f_badfeeling.fulfillment);
+    intentMap.set('overviewIntent', f_overviewIntent.fulfillment);
 
 
     // Todo: connect each custom intent with custom fulfillment modules
